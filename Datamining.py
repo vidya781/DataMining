@@ -1,4 +1,5 @@
-""" A data mining protocol for getting the frequency of some words in a document of piece of text"""
+""" A data mining protocol for getting the frequency of some words in a document of piece of text using dictionaries"""
+
 file = open('mydoc.txt', 'r')
 book = file.read()
 
