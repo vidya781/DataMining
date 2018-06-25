@@ -1,6 +1,7 @@
 """ This is a data mining program--Our objective is to find out the frequency with which certain words appear in a text"""
 """Uses the traditional approach in which frequency of a single word is found and no dictionary is used"""
-file = open('TheBeast.txt','r')
+
+file = open('mydoc.txt','r')    # needless to say, if your document is stored in a different location from your Python installation, the path will have to be provided
 book = file.read()
 
 # After reading the document , one needs to convert everything to lower case by tokenising it
