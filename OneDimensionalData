@@ -1,0 +1,23 @@
+In exploratory data analysis, we have a collection or a data set which is just a set of numbers--say a one dimensional data set. For example, 
+these could be the daily average number of minutes each user spends on the site, the number of times each of a collection of Data science tutorial videos 
+was watched, or similar metrics.
+
+We first proceed to note the summary statistics and we want to know how may data points are there, the smallest, the largest,the mean and the
+standard deviation.
+
+But this still may not yield the complete picture of what the data is trying to represent.A good next step would be to create a histogram in
+which the data is grouped into discrete buckets and count how many points fall into each bucket:
+
+def bucketsize(point,bucket_size):
+    """floor the point to the next lower multiple of bucket_size"""
+    return bucket_size * math.floor(point/bucket_size)
+    
+def make_histogram(points,bucket_size):
+    """buckets the points and counts how many in each bucket"""
+    return Counter(bucketsize(point,bucket_size) for point in points)
+    
+def plot_histogram(points,bucket_size,title=""):
+    histogram = make_histogram(points,bucket_size)
+    plt.bar(histogram.keys(),histogram.values(),width=bucket_size)
+    plt.title(title)
+    plt.show()
