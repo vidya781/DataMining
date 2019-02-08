@@ -1,0 +1,77 @@
+The goal of this write up is to describe the techniques available at our disposal to scan a set of data points and make sense of the distribution
+
+Consider an arbitrary set of numbers in a list...
+
+num_ = [100,49,57,67,....] # and many many data points
+
+num_points = len(num_)  
+largest_val = max(num_)
+smallest_val = min(num_)   # Getting the max and min points
+
+
+Now lets sort the values and get values at specific positions
+
+sorted_values = sorted(num_)
+smallest_val = sorted_values[0]
+second_smallest_val = sorted_values[1]
+second_largest_val = sorted_values[-2]
+
+Central Tendency
+
+This should give an idea of where data is centred.
+
+def mean(x):
+    return sum(x)/len(x)
+mean(num_)
+
+If one has two data points, the mean is the halfway point between them and as we add more data points, there is a shift in means but it always 
+depends on the value of every point. However the median as outlined above does not depend on every value in your data. For example, if one were to 
+make the largest point larger and or the smallest point smaller, the middle points remaining unchanged this means that the median does not change.
+
+It is obvious that the mean is very sensitive to outliers in the data. If outliers are likely to be bad data( or unrepresentative of whatever phenomenon we are
+trying to understand), then the mean can yield a very misleading picture.
+
+We proceed to discuss quantiles next. The quantile represents the value less than which a certain percentile of the data lies.( * the median 
+represents the value less than which 50 % of the data lies)
+
+def quantile(x,p):
+    """returns the pth-percentile value in x"""
+    p_index = int(p * len(x))
+    return sorted(x)[p_index]
+    
+quantile(num_,0.10)
+quantile(num_,0.25)
+quantile(num_,0.75)
+quantile(num_,0.90)
+
+Now onto the mode, the most common value in the series.
+
+def mode(x):
+    """returns a list, might be more than one mode"""
+    counts = Counter(x)
+    max_c = max(counts.values())
+    return[x_i for x_i, count in counts.iteritems() if count == max_c]
+    
+mode(num_)
+
+The range is zero precisely when the max and the min are equal which can only happen if the elements of x are all the same, which means the data is 
+very undispersed. Conversely, if the range is large, then the max is much larger than the min and the data is spread out.
+
+Like the median,the range does not really depend on the whole data set. A data set whose points are all either 0 or 100 has the same range as a data set whose 
+values are 0,100 and lots of 50s. But it seems that the first data set should be more spread out.
+
+More complex measure of dispersion is variance which is computed as :
+
+def diff_mean(x):
+    """translate x by substracting its mean(so the result has mean 0)"""
+    x_bar = mean(x)
+    return [x_i - x_bar for x_i in x]
+    
+ def variance(x):
+     """assumes x has at least two elements"""
+     n = len(x)
+     deviations = diff_mean(x)
+     return sum_of_squares(deviations)/(n-1)
+     
+  variance(num_)
+     
