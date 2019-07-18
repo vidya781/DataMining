@@ -1,0 +1,15 @@
+The objective of this program is to read data from a particular URL and print it. (Python 3 used for this purpose)
+
+import urllib.request
+
+weburl = urllib.request.urlopen('https://www.youtube.com/enduser')
+
+# get the result code and print it
+
+print("result code:  " + str(weburl.getCode()))
+
+# Read the data from the URL and print it
+
+data = weburl.read()
+print(data)
+
