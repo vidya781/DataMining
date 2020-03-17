@@ -1,0 +1,103 @@
+We take a look at the 20 newsgroups dataset found in skikit-learn. Across 20 online newsgroups there are approximately 20000 words.
+A newsgroup is a place on the Internet where one can ask and answer questions about a particular topic.Data is split into training 
+and test sets. 
+
+The datasets are classified as :
+
+1] comp.graphics
+2] comp.os.ms-windows.misc
+3] comp.sys.ibm.pc.hardware
+4] comp.windows.x
+5] rec.autos
+6] rec.motorcycles
+7] rec.sport.baseball
+8] rec.sport.hockey
+9] sci.crypt
+10]sci.electronics
+11]sci.med
+12]sci.space
+13]misc.forsale
+14]talk.politics.misc
+15]talk.politics.guns
+16]talk.politics.mideast
+17]talk.religion.misc
+18]alt.atheism
+19]soc.religion.christian
+20]comp.sys.mac.hardware
+
+It is interesting to note that some of the newsgroups are closely related or even overlapping, for instance, there are 5 groups
+that may contain overlapping terminologies.
+comp.graphics, comp.os.ms-windows.misc, comp.sys.ibm.pc.hardware,comp.sys.mac.hardware and comp.windows.x all stuff related to
+computers.When it comes to investigating terminology related to technology, we obviously know topics like baseball and politics may 
+likely not be in the list.
+
+The dataset is labelled, and each document is composed of text data and a group label.So supervised learning like text classification
+can be done.But for now we focus ion unsupervised learning.
+
+Once the data is loaded, it becomes cached. In most cases, caching the dataset, especially for a relatively small one is 
+considered a good practice.
+
+from sklearn.datasets import fetch_20newsgroups
+groups = fetch_20newsgroups().   # will download the data from the nearest mirror site
+groups.keys()          # Data object is in the form of key-value dictionary
+                      
+# the target_names key gives the newsgroups names
+
+groups['target_names']
+groups.target            # target key corresponds to a newsgroup but is encoded as an integer
+import numpy as np
+np.unique(groups.target)     # distinct values for the integers
+                              
+groups.data[0]       # data of the first topic
+groups.target[0]
+groups.target_names[groups.target[0]]  # approaches to figure out features
+                                          
+From the perspective of feature engineering, the presence or absence of certain words in the documnet may help characterise 
+the document. For example, if the document were about cars, the presence of words as car, doors, and bumper are very helpful.
+Present or not is a boolean condition and also the count of certain words in the document.
+
+We reckon that the number of times a word appears in the document is a sure indication that the document may be about that 
+particular topic but then the length of the document as a whole matters in this regard. If the word cars appears in a document
+multiple number of times, then whether the document is about cars or not will likely depend on the length of the overall document.
+Perhaps we could look at the sequence say, front bumper , sports car, and engine specs.Alternatively bigrams and unigrams could
+also be one way of looking at this document.
+
+Stop words: words encountered often : articles like a, the and are.
+We are interested only in the occurence of certain words,their count or some related measure. So order of words may not matter
+much.( bag of words model)
+Complex Model : Order of words and speech tags
+
+Visualization of the data:
+
+1) Aims-- data structuring
+2) Possible issues may arise 
+3) Irregularities
+
+In the context of mutiple topics or categories , important to know what the distribution of topics is. A uniform class
+distribution is the easiest to deal with because there are no underrepresented or over represented categories.
+We frequently have a skewed distribution with some categories dominating.We use the seaborn package to compute the histogram
+of the categories and plot it using the matplotlib package as well.
+
+import seaborn as sns
+sns.distplot(groups.target)
+import matplotlib.pyplot as plt
+plt.show()
+
+Now , worth noting that data in the 20 news groups are high dimensional. Each feature requires an extra dimension. Word counts
+could be features and we have many dimensions as interesting features.For the unigram counts, we use the CountVectorizer class.
+
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import fetch_20newsgroups
+cv = CountVectorizer(stop_words="english",max_features=500)
+groups = fetch_20newsgroups()
+transformed = cv.fit_transform(groups.data)
+print(cv.get_feature_names())
+sns.distplot(np.log(transformed.toarray().sum(axis=0)))
+plt.xlabel('Log Count')
+plt.ylabel('Frequency')
+plt.title('Distribution Plot of 500 word counts')
+plt.show()
+
